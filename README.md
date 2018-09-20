@@ -2,7 +2,9 @@
 Description of the task that we will make
 ## Getting Started
 To get a copy of these repository install git bash, open it from the command line and use 
+```
 $ git clone: https://github.com/jsmillan10/WebDevParcial1.git
+```
 or use GitHub Desktop or your preferred Git console.
 
 Then, open the root directory and run
