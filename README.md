@@ -33,7 +33,6 @@ Checklist
 NodeJS
 MongoDB
 Yarn
-
 ```
 
 ### Installing
