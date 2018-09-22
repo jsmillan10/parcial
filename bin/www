@@ -1,5 +1,5 @@
 #!/usr/bin/nodejs
-var debug = require('debug')('parcial1-jsmillan10');
+var debug = require('debug')('parcial1-jsmillan10:server');
 var app = require('../app');
 var http = require('http');
 
