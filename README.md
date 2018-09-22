@@ -1,5 +1,10 @@
-# Parcial 1 WebDev
-Description of the task that we will make
+# 1st Exam WebDev
+In this task it is present a briefly use of the Vega-lite library to create bar charts. 
+This project had the purpose of being able not only to visualize the graphics but also to be able to store them in a database, to be able to make comments and to load graphics from csv.
+
+## Creative part
+The creative part of the project was the fact of giving the user the possibility to change between types of graphics and also to be able to select the vertical and horizontal axis when making the bar diagram. In the same way we try to make a friendly design for the user.
+
 ## Getting Started
 To get a copy of these repository install git bash, open it from the command line and use 
 ```
