@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodejs ./bin/www",
-    "heroku-postbuild": "cd front && yarn && yarn run build"
+    "heroku-postbuild": "cd frontend && yarn && yarn run build"
   },
   "dependencies": {
     "body-parser": "~1.0.0",
