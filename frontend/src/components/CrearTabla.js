@@ -26,7 +26,7 @@ export default class CrearTabla extends Component {
     this.handleTextChange = this.handleTextChange.bind(this);
     this.procesarTextoJson = this.procesarTextoJson.bind(this);
     this.guardarTexto = this.guardarTexto.bind(this);
-    
+
   }
 
   componentDidMount() {
@@ -88,8 +88,24 @@ export default class CrearTabla extends Component {
     }
   }
 
-  guardarTexto(event){
-
+  guardarTexto(e){
+    e.preventDefault();
+    let body = JSON.stringify(this.state);
+    console.log(body);
+    fetch('usuarios/signup', {
+      method: 'POST',
+      body: body,
+      headers: {'Content-Type': 'application/json'}
+    }).then(response => {
+      console.log(response);
+      if(response.status === 201) {
+        alert('Usuario creado exitosamente!');
+        callback();
+      }
+      else {
+        alert('Correo electrónico ya existe');
+      }
+    });
   }
 
   handleTextChange(event) {
