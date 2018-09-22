@@ -1,0 +1,97 @@
+/*------------
+Navbar Styles
+ ------------*/
+
+nav{
+    background: #4f5be1;
+    width: 100%;
+}
+
+.navbar-light .navbar-brand{
+    color: white !important;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    padding-left: 3rem !important;
+    padding-right: 5rem !important;
+}
+
+.nav-item{
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 0.5s ease;
+    text-align: center;
+    border-right: 10vw;
+    width: 10vw;
+}
+
+.nav-item:hover{
+    background-color: rgb(255, 255, 255);
+    transition: background-color 0.5s ease;
+}
+
+.nav-item:focus{
+    background-color: #4f5be1;
+    transition: background-color 0.5s ease;
+}
+
+.active-item{
+    background: #000;round-color: rgb(79, 91, 225);
+    transition: background-color 0.5s ease;
+    transition: color 0.5s ease;
+    transition: border-bottom-color 0.5s ease;
+    border-bottom: #4f5be1 solid 2px;
+    color: #4f5be1;
+}
+
+.nav-link{
+    color: rgb(255, 255, 255);
+    transition: color 0.5s ease;
+    font-family: 'Mukta Mahee', sans-serif;
+    font-size: 100%;
+}
+
+.nav-link:hover{
+    color: #4f5be1;
+    transition: color 0.5s ease;
+}
+
+.nav-link:focus{
+    color: white;
+    transition: color 0.5s ease;
+}
+
+.active-link{
+    color: white;
+    transition: color 0.5s ease;
+}
+
+#navbar_logo{
+    height: 70%;
+    width: 70%;
+}
+
+
+.navbar-toggler-icon{
+    color: rgb(57, 24, 255);
+}
+
+/*------------
+Content Adjustment Styles
+ ------------*/
+
+@media (max-width: 768px) {
+    .nav-item{
+        height: 100%;
+        border-radius: 0;
+        text-align: center;
+        width: 100%;
+    }
+
+    #navbar_logo{
+        height: 70%;
+        width: 70%;
+    }
+}

@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import vega from 'vega';
-import vegaLite from 'vega-lite';
+import '../style/App.css';
+import {Container, Row, Col} from 'reactstrap';
 import csvParse from 'papaparse';
 import vegaEmbed from 'vega-embed';
 import registerServiceWorker from './../registerServiceWorker';
 
-export default class Inicio extends Component {
+export default class CrearTabla extends Component {
   constructor(props) {
     super(props);
 
@@ -14,12 +14,19 @@ export default class Inicio extends Component {
       texto: '',
       embed: {},
       spec: {},
+      xname:'',
+      yname:'',
+      xtype:'',
+      ytype:'',
+      autor: '',
       archivo: null
     };
     this.handleUploadFile = this.handleUploadFile.bind(this);
     this.procesarArchivo = this.procesarArchivo.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
     this.procesarTextoJson = this.procesarTextoJson.bind(this);
+    this.guardarTexto = this.guardarTexto.bind(this);
+    
   }
 
   componentDidMount() {
@@ -34,7 +41,7 @@ export default class Inicio extends Component {
         },
         'mark': 'bar',
         'encoding': {
-          'y': {'field': 'a', 'type': 'quantitative'},
+          'y': {'field': 'a', 'type': 'ordinal'},
           'x': {'field': 'b', 'type': 'quantitative'}
         }
       }
@@ -81,21 +88,34 @@ export default class Inicio extends Component {
     }
   }
 
+  guardarTexto(event){
+
+  }
+
   handleTextChange(event) {
     this.setState({texto: event.target.value});
+  }
+
+  handleNameChange(event) {
+    this.setState({autor: event.target.value});
   }
 
   render() {
     return (
       <div>
-        <div>
-          Escriba el json que desea cargar
-        </div>
-        <textarea cols='40' rows='20' onChange={this.handleTextChange}/>
-        <br/>
-        <button onClick={this.procesarTextoJson}>Generar Tabla</button>
-        <span/><input type="file" onChange={this.handleUploadFile}/>
-        <div ref={(div) => this.divTarget = div}></div>
+        <Container className={'contenedor_principal'}>
+          <div>
+            Escriba el json que desea cargar
+          </div>
+          <textarea cols='40' rows='20' onChange={this.handleTextChange} defaultValue={'[{"a": "G", "b": 19}, {"a": "H", "b": 87}, {"a": "I", "b": 52}]'}/>
+          <br/>
+          <button onClick={this.procesarTextoJson}>Generar Tabla</button>
+          <span/><input type="file" onChange={this.handleUploadFile}/>
+          <div ref={(div) => this.divTarget = div}>
+          </div>
+          <input type="text" className="form-control" id="inputName" placeholder="Nombre" onChange={this.handleNameChange}/>
+          <button onClick={this.guardarTexto}>Guardar tabla</button>
+        </Container>
       </div>
     );
   }

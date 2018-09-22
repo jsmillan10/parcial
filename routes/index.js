@@ -66,7 +66,13 @@ router.post('/graficas', (req, res, next) => {
       titulo: req.body.titulo,
       grafica: req.body.grafica,
       calificaciones: [],
-      timestamp: req.body.timestamp
+      timestamp: req.body.timestamp,
+      spec:{
+        x_name: req.body.x_name,
+        x_type: req.body.x_type,
+        y_name: req.body.y_name,
+        y_type: req.body.y_type
+      },
     },
     (err, result) => {
       assert.equal(null, err);
