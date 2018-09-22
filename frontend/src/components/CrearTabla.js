@@ -14,11 +14,13 @@ export default class CrearTabla extends Component {
       texto: '',
       embed: {},
       spec: {},
-      xname:'',
-      yname:'',
-      xtype:'',
-      ytype:'',
+      xname: 'b',
+      yname: 'a',
+      xtype: 'ordinal',
+      ytype: 'quantitative',
       autor: '',
+      titulo: '',
+      fecha: '',
       archivo: null
     };
     this.handleUploadFile = this.handleUploadFile.bind(this);
@@ -26,7 +28,13 @@ export default class CrearTabla extends Component {
     this.handleTextChange = this.handleTextChange.bind(this);
     this.procesarTextoJson = this.procesarTextoJson.bind(this);
     this.guardarTexto = this.guardarTexto.bind(this);
-
+    this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.handleLateralChange = this.handleLateralChange.bind(this);
+    this.handleFechaChange = this.handleFechaChange.bind(this);
+    this.handleHorizontalSelectChange = this.handleHorizontalSelectChange.bind(this);
+    this.handleVerticalSelectChange = this.handleVerticalSelectChange.bind(this);
+    this.handleHorizontalChange = this.handleHorizontalChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
   }
 
   componentDidMount() {
@@ -41,8 +49,8 @@ export default class CrearTabla extends Component {
         },
         'mark': 'bar',
         'encoding': {
-          'y': {'field': 'a', 'type': 'ordinal'},
-          'x': {'field': 'b', 'type': 'quantitative'}
+          'y': {'field': this.state.yname, 'type': this.state.ytype},
+          'x': {'field': this.state.xname, 'type': this.state.xtype}
         }
       }
     });
@@ -54,6 +62,20 @@ export default class CrearTabla extends Component {
   }
 
   handleUploadFile(e) {
+    this.setState({
+      spec: {
+        '$schema': 'https://vega.github.io/schema/vega-lite/v2.json',
+        'description': 'A simple bar chart with embedded data.',
+        'data': {
+          'name': 'myData'
+        },
+        'mark': 'bar',
+        'encoding': {
+          'y': {'field': this.state.yname, 'type': this.state.ytype},
+          'x': {'field': this.state.xname, 'type': this.state.xtype}
+        }
+      }
+    });
     var file = e.target.files[0];
     console.log('archivo', file);
     csvParse.parse(file, {
@@ -67,13 +89,27 @@ export default class CrearTabla extends Component {
   }
 
   procesarArchivo() {
+    this.setState({
+      spec: {
+        '$schema': 'https://vega.github.io/schema/vega-lite/v2.json',
+        'description': 'A simple bar chart with embedded data.',
+        'data': {
+          'name': 'myData'
+        },
+        'mark': 'bar',
+        'encoding': {
+          'y': {'field': this.state.yname, 'type': this.state.ytype},
+          'x': {'field': this.state.xname, 'type': this.state.xtype}
+        }
+      }
+    });
     try {
       console.log('Json Archivo', this.state.archivo);
       vegaEmbed(this.divTarget, this.state.spec, this.state.embed)
         .then((res) => res.view.insert('myData', this.state.archivo).run());
     }
     catch (e) {
-      console.log('Problema archivo', e);
+      alert('Hubo un problema al guardar, intente de nuevo');
     }
   }
 
@@ -84,28 +120,44 @@ export default class CrearTabla extends Component {
         .then((res) => res.view.insert('myData', json).run());
     }
     catch (e) {
-      console.log('Problema escrito', e);
+      alert('Hubo un problema al guardar, intente de nuevo');
     }
   }
 
-  guardarTexto(e){
+  guardarTexto(e) {
     e.preventDefault();
-    let body = JSON.stringify(this.state);
-    console.log(body);
-    fetch('usuarios/signup', {
-      method: 'POST',
-      body: body,
-      headers: {'Content-Type': 'application/json'}
-    }).then(response => {
-      console.log(response);
-      if(response.status === 201) {
-        alert('Usuario creado exitosamente!');
-        callback();
-      }
-      else {
-        alert('Correo electrónico ya existe');
-      }
-    });
+    try {
+      JSON.parse(this.state.texto);
+      var bodyFinal = JSON.stringify((this.state.texto));
+      let bodyTexto =
+        {
+          autor: this.state.autor,
+          titulo: this.state.titulo,
+          grafica: bodyFinal,
+          timestamp: this.state.fecha,
+          x_name: this.state.xname,
+          x_type: this.state.xtype,
+          y_name: this.state.yname,
+          y_type: this.ytype
+        };
+      fetch('graficas/', {
+        method: 'POST',
+        body: JSON.stringify(bodyTexto),
+        headers: {'Content-Type': 'application/json'}
+      }).then(response => {
+        console.log(response);
+        if (response.status === 201) {
+          alert('Grafica guardada exitosamente!');
+
+        }
+        else {
+          alert('Hubo un problema al guardar, intente de nuevo');
+        }
+      });
+    }
+    catch (e) {
+
+    }
   }
 
   handleTextChange(event) {
@@ -116,20 +168,71 @@ export default class CrearTabla extends Component {
     this.setState({autor: event.target.value});
   }
 
+  handleTitleChange(event) {
+    this.setState({titulo: event.target.value});
+  }
+
+  handleFechaChange(event) {
+    this.setState({fecha: event.target.value});
+  }
+
+  handleLateralChange(event){
+    this.setState({yname: event.target.value});
+  }
+
+  handleHorizontalChange(event){
+    this.setState({xname: event.target.value});
+  }
+
+  handleVerticalSelectChange(event){
+    this.setState({ytype: event.target.value});
+  }
+
+  handleHorizontalSelectChange(event){
+    this.setState({xtype: event.target.value});
+  }
+
   render() {
     return (
       <div>
         <Container className={'contenedor_principal'}>
+          <div><h1>Creador de gráficos</h1></div>
+          <p className="labelInput">Como quiere nombrar su eje vertical?</p>
+          <input type="text" className="form-control" id="inputY" placeholder="Eje Lateral"
+            onChange={this.handleLateralChange}/>
+          <p className="labelInput">Seleccione si quiere hacer su tabla quantitativa o ordinal en el eje vertical</p>
+          <select onChange={this.handleVerticalSelectChange} className="form-control" id="exampleFormControlSelect1">
+            <option>quantitative</option>
+            <option>ordinal</option>
+          </select>
+          <p className="labelInput">Como quiere nombrar su eje horizontal?</p>
+          <input type="text" className="form-control" id="inputY" placeholder="Eje Horizontal"
+            onChange={this.handleHorizontalChange}/>
           <div>
+            <p className="labelInput">Seleccione si quiere hacer su tabla quantitativa o ordinal en el eje horizontal</p>
+            <select onChange={this.handleHorizontalSelectChange} className="form-control" id="exampleFormControlSelect1">
+              <option>quantitative</option>
+              <option>ordinal</option>
+            </select>
             Escriba el json que desea cargar
           </div>
-          <textarea cols='40' rows='20' onChange={this.handleTextChange} defaultValue={'[{"a": "G", "b": 19}, {"a": "H", "b": 87}, {"a": "I", "b": 52}]'}/>
+          <textarea cols='40' rows='20' onChange={this.handleTextChange}
+            defaultValue={'[{"a": "G", "b": 19}, {"a": "H", "b": 87}, {"a": "I", "b": 52}]'}/>
           <br/>
           <button onClick={this.procesarTextoJson}>Generar Tabla</button>
           <span/><input type="file" onChange={this.handleUploadFile}/>
           <div ref={(div) => this.divTarget = div}>
           </div>
-          <input type="text" className="form-control" id="inputName" placeholder="Nombre" onChange={this.handleNameChange}/>
+          <br/>
+          <p className="labelInput">Dale un titulo a tu gráfica</p>
+          <input type="text" className="form-control" id="inputTitle" placeholder="Titulo"
+            onChange={this.handleTitleChange}/>
+          <p className="labelInput">Escribe tu nombre</p>
+          <input type="text" className="form-control" id="inputName" placeholder="Nombre"
+            onChange={this.handleNameChange}/>
+          <p className="labelInput">Escriba la fecha</p>
+          <input type="text" className="form-control" id="inputFecha" placeholder="Fecha"
+            onChange={this.handleFechaChange}/>
           <button onClick={this.guardarTexto}>Guardar tabla</button>
         </Container>
       </div>
