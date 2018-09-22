@@ -39,7 +39,7 @@ router.get('/graficas/:idGrafica', (req, res, next) => {
 
     let collection = db.collection('graficas');
     let idGrafica = String(req.params.idGrafica);
-    collection.find({},
+    collection.find(
       {
         _id: new mongo.ObjectID(idGrafica)
       }).toArray((err, result) => {
