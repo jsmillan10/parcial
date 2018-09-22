@@ -128,7 +128,7 @@ export default class Tabla extends Component {
               <input type="text" className="form-control" id="inputName" placeholder="Nombre"
                 onChange={this.handleCalificadorChange}/>
               <p className='labelInput'>Elige el puntaje que le quieres dar: </p>
-              <input type='number' className='form-control inputNumber' name={prod._id}
+              <input type='number' className='form-control inputNumber'
                 placeholder='0' onChange={this.handleQuantityChange}/>
             </div>
           </Container>
