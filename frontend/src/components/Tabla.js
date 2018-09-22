@@ -14,8 +14,42 @@ export default class Tabla extends Component {
     this.state = {
       id: localStorage.getItem('idGrafica'),
       grafica: {},
-      calificaciones: []
+      calificaciones: [],
+      calificador: '',
+      puntaje: ''
     };
+
+    this.handleCalificadorChange = this.handleCalificadorChange.bind(this);
+    this.handleQuantityChange = this.handleQuantityChange.bind(this);
+  }
+
+  guardarTexto(e) {
+    e.preventDefault();
+    try {
+      JSON.parse(this.state.texto);
+      let bodyTexto =
+        {
+          puntaje: this.state.puntaje,
+          calificador: this.state.calificador,
+        };
+      fetch('graficas/' + this.state.id, {
+        method: 'POST',
+        body: JSON.stringify(bodyTexto),
+        headers: {'Content-Type': 'application/json'}
+      }).then(response => {
+        console.log(response);
+        if (response.status === 201) {
+          alert('Grafica guardada exitosamente!');
+
+        }
+        else {
+          alert('Hubo un problema al guardar, intente de nuevo');
+        }
+      });
+    }
+    catch (e) {
+
+    }
   }
 
   componentDidMount() {
@@ -26,7 +60,7 @@ export default class Tabla extends Component {
       return response.json();
     })
       .then((json) => {
-        console.log('json',json[0]);
+        console.log('json', json[0]);
         this.setState({grafica: json[0]});
         try {
           let textoFino = this.state.grafica.grafica.replace(/'/g, '"');
@@ -67,13 +101,22 @@ export default class Tabla extends Component {
     ));
   }
 
+  handleCalificadorChange(event) {
+    this.setState({calificador: event.target.value});
+  }
+
+  handleQuantityChange(event) {
+    this.setState({puntaje: event.target.value});
+  }
+
+
   render() {
     return (
       <div>
         <div className='container-fluid'>
           <Container id={''}>
             <div className='card mb-3'>
-              <div  className='card-header text-center title'>
+              <div className='card-header text-center title'>
                 <h4>Grafica realizada por {this.state.grafica.autor}</h4>
               </div>
               <div className='card-body'>
@@ -81,6 +124,12 @@ export default class Tabla extends Component {
                 <div ref={(div) => this.targetDiv = div}></div>
               </div>
               {this.state.grafica.calificaciones === undefined ? '' : this.cargarCalificaciones()}
+              <p className="labelInput">Escribe tu nombre Para calificar</p>
+              <input type="text" className="form-control" id="inputName" placeholder="Nombre"
+                onChange={this.handleCalificadorChange}/>
+              <p className='labelInput'>Elige el puntaje que le quieres dar: </p>
+              <input type='number' className='form-control inputNumber' name={prod._id}
+                placeholder='0' onChange={this.handleQuantityChange}/>
             </div>
           </Container>
         </div>
